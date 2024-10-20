@@ -79,3 +79,13 @@ body{
     font-size: 0.8rem;
     color: #000;
 }
+
+
+a {
+    display: block;
+    margin: auto;
+    width: 30%;
+    border: #000 solid 1px;
+    border-radius: 10%;
+    text-align: center;
+}
