@@ -1,0 +1,7 @@
+.index-button {
+    display: block;
+    text-align: center;
+    border: #000 1px solid;
+    border-radius: 50px;
+    padding: 50px;
+}

@@ -1,0 +1,30 @@
+.friend-container {
+    position: relative;
+    height: 8vh;
+    background-color: darkgray;
+    border: #000 solid 1px ;
+}
+.friend-img {
+    display: inline-block;
+    height: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+.friend-name {
+    position: absolute;
+    top: 1vh;
+    left: 10vh;
+}
+.friend-message {
+    position: absolute;
+    bottom: 1vh;
+    left: 10vh;
+}
+a {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}

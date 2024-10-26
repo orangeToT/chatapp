@@ -1,1 +1,36 @@
-TR
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+
+{% block extra_style %}
+{% endblock extra_style %}
+    
+
+{% block header-back %}
+    <a href="{% url 'myapp:friends'%}" class="back">戻る</a>
+{% endblock header-back %}
+{% block header-reload %}
+    <a href="{% url 'myapp:talk_room' receive.id %}" class="reload">更新</a>
+{% endblock header-reload %}
+    
+
+
+{% block content %}
+    
+    {% for m in talk %}
+        {% if m.send_id == user.id %}
+            <p>> {{user.username}}</p>
+        {% else %}
+            <p>> {{receive.username}}</p>
+        {% endif %}
+            
+        <p>{{m.content}}</p>
+    {% endfor %}
+        
+    <form method="post">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="送信">
+    </form>
+{% endblock content %}
+    

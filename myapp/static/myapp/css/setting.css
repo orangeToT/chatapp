@@ -1,0 +1,20 @@
+.setting-wrap {
+    text-align: center;
+    margin: auto;
+}
+
+form {
+    width: 100%;
+}
+.setting-wrap a, .setting-wrap input{
+    display: block;
+    width: 50%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin: auto;
+    line-height: 100%;
+    border: #000 solid 1px;
+    background-color: #FFF;
+    color: #000;
+    text-decoration: none;
+}

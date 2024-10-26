@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'myapp/css/reset.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'myapp/css/base.css' %}" />
     {% block extra_style %}{% endblock %}
     <title>DeMiAインターン</title>
@@ -12,9 +13,11 @@
     {% block header %}
     <header class="header">
         <div class="header-container">
+            {% block header-back %}{% endblock header-back %}
             <span class="header-container__title">
                 {% block header-title %}{% endblock %}
-            </span>
+            </span>       
+            {% block header-reload %}{% endblock header-reload %}
         </div>
     </header>
     {% endblock %}

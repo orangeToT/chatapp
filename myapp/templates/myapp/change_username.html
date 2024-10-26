@@ -1,0 +1,19 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+
+{% block header-title %}
+    名前
+{% endblock header-title %}
+
+
+{% block content %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form}}
+        {% if error%}
+            {{error}}
+        {%endif%}
+        <input type="submit" value="送信">
+    </form>
+{% endblock content %}

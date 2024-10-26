@@ -1,0 +1,16 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+
+{% block header-title %}
+    アイコン
+{% endblock header-title %}
+
+
+{% block content %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="送信">
+    </form>
+{% endblock content %}

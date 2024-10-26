@@ -1,0 +1,15 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+
+{% block header-title %}
+    ログイン
+{% endblock header-title %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="submit">
+</form>
+{% endblock content %}
