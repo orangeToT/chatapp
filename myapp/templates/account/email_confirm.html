@@ -1,0 +1,22 @@
+{% extends "myapp/base.html" %}
+{% load static %}
+
+
+{% block header-title %}
+    メールアドレス確認
+{% endblock header-title %}
+    
+
+{% block content %}
+
+{% if confirmation %}
+    <p>ユーザー登録を確定するには、以下のボタンを押してください。</p>
+    <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+        {% csrf_token %}
+        <input type="submit" value="確定">
+    </form>
+{% else %}
+    <p>リンクの有効期限が過ぎています。<a href="{% url 'account_email' %}">再申請</a>.</p>
+{% endif %}
+    
+{% endblock content %}

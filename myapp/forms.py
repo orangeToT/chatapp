@@ -1,17 +1,32 @@
+import os
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.mail import EmailMessage
+from allauth.account.forms import SignupForm
 from .models import CustomUser, Message
 from django import forms
 
+# Allauthを使うため削除
+# class SignUpForm(UserCreationForm):
+#     class Meta:
+#         model = CustomUser
+#         fields = ["username","email","password1","password2","img"]
 
-class SignUpForm(UserCreationForm):
-    class Meta:
-        model = CustomUser
-        fields = ["username","email","password1","password2","img"]
+class MySignUpForm(SignupForm):
+    img = forms.ImageField()
+
+    def save(self, request):
+        user = super().save(request)
+        user.img = self.cleaned_data['img']
+        user.save()
+        return user
 
 class SignInForm(AuthenticationForm):
     class Meta:
         model = CustomUser
         fields = ["username","password"]
+
+class FriendSearchForm(forms.Form):
+    search_keyword = forms.CharField(max_length=50, required=True,widget=forms.TextInput(attrs={'placeholder': 'ユーザー名を入力'}))
 
 class MessageForm(forms.ModelForm):
     class Meta:

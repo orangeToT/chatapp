@@ -1,35 +1,46 @@
 import operator
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormView
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import SignUpForm, SignInForm, MessageForm, UsernameChangeForm, EmailChangeForm, IconChangeForm
+from django.core.mail import EmailMessage
+
+from .forms import * 
 from .models import CustomUser, Message
 
 
 def index(request):
     return render(request, "myapp/index.html")
 
-def signup_view(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect("myapp:index")
-    else:
-        form = SignUpForm()
-    return render(request, "myapp/signup.html",{'form': form})
-
-# urls.pyにLoginViewクラスを直接記述したため消去
-# def login_view(request):
-#     return LoginView.as_view(template_name='myapp/login.html',form_class=SignInForm)(request)
+# Allauthを使うため削除
+#
+# def signup_view(request):
+#     if request.method == 'POST':
+#         form = SignUpForm(request.POST,request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("myapp:index")
+#     else:
+#         form = SignUpForm()
+#     return render(request, "myapp/signup.html",{'form': form})
 
 @login_required
 def friends(request):
     user = request.user
-    friends = CustomUser.objects.exclude(id=request.user.id)
+
+    if request.GET.get("search_keyword"):
+        form = request.GET.get('search_keyword')
+        friends = CustomUser.objects.filter(
+            ~Q(id=request.user.id) & Q(username__contains = form)
+        ).all()
+    else:
+        friends = CustomUser.objects.exclude(id=request.user.id)
+
+    form = FriendSearchForm()
 
     info = []
     top_message = []
@@ -42,9 +53,11 @@ def friends(request):
             top_nomessage.append([friend.id, friend.username, friend.img, None, None])
     top_message = sorted(top_message, key=operator.itemgetter(4), reverse=True)
     info.extend(top_message)
-    info.extend(top_nomessage)
+    info.extend(top_nomessage)      
+
     context = {
-        "info" : info
+        "info": info,
+        "form": form,
     }
     return render(request, "myapp/friends.html", context)
 
@@ -138,3 +151,16 @@ def password_change_done(request):
 
 class MyLogoutView(LoginRequiredMixin, LogoutView):
     pass
+
+# class EmailLogin(FormView):
+#     template_name = ""
+#     form_class = SignInEmailForm
+#     success_url = "myapp:emailloginredirect"
+
+# class EmailLoginRedirect(TemplateView,EmailMessage):
+#     template_name = "myapp:login_email_redirect.html"
+
+    
+#     def __init__(self, *args, **kwargs):
+#         super().send()
+        

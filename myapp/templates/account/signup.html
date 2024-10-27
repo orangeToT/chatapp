@@ -1,0 +1,33 @@
+{% extends 'myapp/base.html' %}
+{% load static %}
+
+{% block header-title %}
+    会員登録
+{% endblock header-title %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        <label for="id_username">Username:</label>
+        {{ form.username }}
+    </div>
+    <div>
+        <label for="id_email">Email adress:</label>
+        {{ form.email}}
+    </div>
+    <div>
+        <label for="id_password1">Password:</label>
+        {{ form.password1 }}
+    </div>
+    <div>
+    <label for="id_password2">Password confirmation:</label>
+    {{ form.password2 }}
+    </div>
+    <div>
+    <label for="id_img">Profile image:</label>
+    {{ form.img }}
+    </div>
+    <input type="submit" value="submit">
+</form>
+{% endblock content %}

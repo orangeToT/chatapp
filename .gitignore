@@ -281,3 +281,4 @@ $RECYCLE.BIN/
 media_local/*
 
 intern/settings_dev.py
+.vscode/launch.json

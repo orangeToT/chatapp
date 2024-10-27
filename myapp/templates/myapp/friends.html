@@ -14,6 +14,12 @@
 
 {% block content %}
 
+<div class="search">
+    <form method="GET">
+    {{ form.search_keyword }}
+    <input type="submit" value="検索">
+</form>
+</div>
 <div class="list">
     {% for friend_id, friend_name, friend_img, message, time in info %}
     

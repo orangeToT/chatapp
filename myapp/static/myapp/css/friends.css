@@ -20,6 +20,15 @@
     bottom: 1vh;
     left: 10vh;
 }
+
+.search form{
+    display: flex;
+    justify-content: space-between;
+    background-color: cadetblue;
+}
+.search form #id_serch_keyword {
+    flex: 8;
+}
 a {
     display: block;
     position: absolute;

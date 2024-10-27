@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
-    img = models.ImageField(blank=True, null=True)
+    img = models.ImageField(upload_to='',blank=True, null=True)
     first_name = None
     last_name = None
 
