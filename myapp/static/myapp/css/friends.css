@@ -29,7 +29,7 @@
 .search form #id_serch_keyword {
     flex: 8;
 }
-a {
+.friend-link {
     display: block;
     position: absolute;
     top: 0;
