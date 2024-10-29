@@ -280,7 +280,7 @@ $RECYCLE.BIN/
 
 media_local/*
 
-intern/settings_dev.py
+intern/settings/dev.py
 .vscode/launch.json
 
 # 仮想環境

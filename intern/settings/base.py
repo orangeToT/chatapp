@@ -14,6 +14,9 @@ from pathlib import Path
 
 import os
 import environ
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -158,10 +161,19 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = ''
 
 ACCOUNT_FORMS = {'signup': 'myapp.forms.MySignUpForm'}
 
-# デプロイ環境のための設定(追加)
+MEDIA_ROOT = BASE_DIR / 'media_local'
+
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend")
+
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "no-reply@example.com")
+
+# デプロイ環境のための設定
 if os.path.isfile('.env'): # .envファイルが存在しない時にもエラーが発生しないようにする
     env = environ.Env(DEBUG=(bool, False))
     environ.Env.read_env('.env')
 
     DEBUG = env('DEBUG')
     ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+    SECRET_KEY = env('SECRET_KEY')
+
+    
