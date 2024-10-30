@@ -7,7 +7,7 @@ class CustomUser(AbstractUser):
     last_name = None
 
 class Message(models.Model):
-    send = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="send")
-    receive = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="receive")
-    content = models.CharField(max_length=500)
+    send = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="sent_message")
+    receive = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="received_message")
+    content = models.CharField(max_length=500,null=True)
     time = models.DateTimeField(auto_now_add=True,blank=True,null=True)

@@ -20,6 +20,12 @@
     bottom: 1vh;
     left: 10vh;
 }
+.friend-time {
+    position: absolute;
+    bottom: 0;
+    right: 10vh;
+
+}
 
 .search form{
     display: flex;
