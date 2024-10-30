@@ -1,13 +1,12 @@
 import operator
 from django.shortcuts import redirect, render, get_object_or_404
-from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic.base import TemplateView
-from django.views.generic.edit import FormView
-from django.db.models import Q
+from django.contrib.auth.views import LogoutView
+from django.db.models import Q, F, Max
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import EmailMessage
+from django.db.models import Prefetch, OuterRef, Subquery
+from django.db.models.functions import Coalesce, Greatest
 
 from .forms import * 
 from .models import CustomUser, Message
@@ -32,34 +31,55 @@ def index(request):
 def friends(request):
     user = request.user
 
-    if request.GET.get("search_keyword"):
-        form = request.GET.get('search_keyword')
-        friends = CustomUser.objects.filter(
-            ~Q(id=request.user.id) & Q(username__contains = form)
-        ).all()
+    latest_message = Message.objects.filter(
+        Q(send_id = user.id, receive_id = OuterRef("id"))|Q(receive_id = user.id, send_id = OuterRef("id"))
+        ).order_by("-time")
+    
+    if request.GET.get('search_keyword'):
+        form = FriendSearchForm(request.GET)
+        if form.is_valid():
+            search_keyword = form.cleaned_data["search_keyword"]
+            friends = (
+                CustomUser.objects.filter(
+                ~Q(id=request.user.id) & (Q(username__icontains = search_keyword) | Q(email__icontains = search_keyword))
+                )
+                .annotate(
+                    latest_message_content=Subquery(latest_message.values("content")[:1]),latest_message_time=Subquery(latest_message.values("time")[:1])
+                )
+        )
     else:
-        friends = CustomUser.objects.exclude(id=request.user.id)
-
-    form = FriendSearchForm()
+        friends = (
+            CustomUser.objects.exclude(id=user.id)
+            .annotate(
+                latest_message_content=Subquery(latest_message.values("content")[:1]),latest_message_time=Subquery(latest_message.values("time")[:1])
+            )
+        )
 
     info = []
     top_message = []
     top_nomessage = []
+        
+
     for friend in friends:
-        latest_message = Message.objects.filter(Q(send_id=user.id,receive_id=friend.id)|Q(send_id=friend.id,receive_id=user.id)).order_by("time").last()
-        if latest_message:
-            top_message.append([friend.id, friend.username, friend.img, latest_message.content, latest_message.time])
+        if friend.latest_message_content:
+            top_message.append([friend.id, friend.username, friend.img, friend.latest_message_content, friend.latest_message_time])
         else:
             top_nomessage.append([friend.id, friend.username, friend.img, None, None])
+
+
+
     top_message = sorted(top_message, key=operator.itemgetter(4), reverse=True)
     info.extend(top_message)
-    info.extend(top_nomessage)      
+    info.extend(top_nomessage)
+
+    form = FriendSearchForm()
 
     context = {
         "info": info,
         "form": form,
     }
     return render(request, "myapp/friends.html", context)
+
 
 @login_required
 def talk_room(request, friend):
@@ -70,11 +90,7 @@ def talk_room(request, friend):
     ).order_by("time")
 
     form = MessageForm()
-    context = {
-                "form": form,
-                "receive" : receive,
-                "talk": talk
-            }
+    
     if request.method == 'POST':
         new_talk = Message(send=send, receive=receive)
         form = MessageForm(request.POST, instance=new_talk)
@@ -82,6 +98,12 @@ def talk_room(request, friend):
         if form.is_valid():
             form.save()
             return redirect("myapp:talk_room", friend)
+        
+    context = {
+            "form": form,
+            "receive" : receive,
+            "talk": talk
+        }
         
     return render(request, "myapp/talk_room.html",context)
 
@@ -151,16 +173,3 @@ def password_change_done(request):
 
 class MyLogoutView(LoginRequiredMixin, LogoutView):
     pass
-
-# class EmailLogin(FormView):
-#     template_name = ""
-#     form_class = SignInEmailForm
-#     success_url = "myapp:emailloginredirect"
-
-# class EmailLoginRedirect(TemplateView,EmailMessage):
-#     template_name = "myapp:login_email_redirect.html"
-
-    
-#     def __init__(self, *args, **kwargs):
-#         super().send()
-        

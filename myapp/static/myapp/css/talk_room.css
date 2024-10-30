@@ -1,0 +1,39 @@
+.back, .reload {
+    position: absolute;
+    display: block;
+    height: 100%;
+    width: 20vw;
+    border: #000 1px solid;
+    text-align: center;
+    text-decoration: none;
+}
+
+.back {
+    left: 10%;
+}
+.reload {
+    right: 10%;
+}
+
+.message-container {
+    position: relative;
+    background-color: darkgray;
+    border: #000 solid 1px ;
+}
+
+.message-form {
+    display: flex;
+    justify-content: space-between;
+    background-color: cadetblue;
+    position: absolute;
+    bottom: 64px;
+}
+
+.message-form div {
+    flex: 8;
+}
+
+#id_content {
+    height: 100%;
+    width: 100%;
+}

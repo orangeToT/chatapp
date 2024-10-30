@@ -3,12 +3,18 @@
 
 
 {% block extra_style %}
+    <link rel="stylesheet" href="{% static 'myapp/css/talk_room.css' %}">
 {% endblock extra_style %}
-    
+
+
+{% block header-title %}
+    {{ receive.username }}
+{% endblock header-title %}
 
 {% block header-back %}
     <a href="{% url 'myapp:friends'%}" class="back">戻る</a>
 {% endblock header-back %}
+
 {% block header-reload %}
     <a href="{% url 'myapp:talk_room' receive.id %}" class="reload">更新</a>
 {% endblock header-reload %}
@@ -17,19 +23,21 @@
 
 {% block content %}
     
-    {% for m in talk %}
-        {% if m.send_id == user.id %}
+    {% for message in talk %}
+    <div class="message-container">
+        {% if message.send_id == user.id %}
             <p>> {{user.username}}</p>
         {% else %}
             <p>> {{receive.username}}</p>
         {% endif %}
-            
-        <p>{{m.content}}</p>
+        <p>{{message.content}}</p>
+    </div>
     {% endfor %}
-        
-    <form method="post">
+    
+
+    <form method="post" class="message-form">
         {% csrf_token %}
-        {{form}}
+        {{ form }}
         <input type="submit" value="送信">
     </form>
 {% endblock content %}

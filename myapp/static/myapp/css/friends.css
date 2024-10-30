@@ -1,6 +1,6 @@
 .friend-container {
     position: relative;
-    height: 8vh;
+    height: 100px;
     background-color: darkgray;
     border: #000 solid 1px ;
 }
@@ -13,16 +13,18 @@
 .friend-name {
     position: absolute;
     top: 1vh;
-    left: 10vh;
+    left: 100px;
 }
 .friend-message {
     position: absolute;
     bottom: 1vh;
-    left: 10vh;
+    left: 100px;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .friend-time {
     position: absolute;
-    bottom: 0;
+    top: 0;
     right: 10vh;
 
 }

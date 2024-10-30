@@ -1,6 +1,4 @@
-import os
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.core.mail import EmailMessage
 from allauth.account.forms import SignupForm
 from .models import CustomUser, Message
 from django import forms

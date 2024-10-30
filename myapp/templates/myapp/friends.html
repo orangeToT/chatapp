@@ -20,7 +20,7 @@
 </form>
 </div>
 <div class="list">
-    {% for friend_id, friend_name, friend_img, message, time in info %}
+    {% for friend_id, friend_name, friend_img, friend_message, friend_time in info %}
     
         <div class="friend-container">
             {% if friend_img %}
@@ -31,12 +31,12 @@
             
             <p class="friend-name">{{friend_name}}</p>
             
-            {% if message %}
-                <p class="friend-message">{{message}}</p>
+            {% if friend_message %}
+                <p class="friend-message">{{friend_message}}</p>
             {% endif %}
             
-            {% if time %}
-                <p class="friend-time">{{time}}</p>
+            {% if friend_time %}
+                <p class="friend-time">{{friend_time}}</p>
             {% endif %}
             <a href="{% url 'myapp:talk_room' friend_id %}" class="friend-link"></a>
         </div>
